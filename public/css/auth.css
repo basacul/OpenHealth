@@ -155,7 +155,9 @@ Such that flash messages do not mess with the grid
   z-index: 11;
 }
 
-
+#closed {
+	color: white;
+}
 
 
 

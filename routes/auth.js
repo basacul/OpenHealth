@@ -42,6 +42,7 @@ router.post("/login", middleware.isVerified, passport.authenticate('local', {
 	// });
 });
 
+/* // In order to avoid further registrations
 router.get('/register', function (req, res) {
     if (!req.isAuthenticated()) {
         res.render('auth/register');
@@ -50,10 +51,12 @@ router.get('/register', function (req, res) {
         res.redirect('/home');
     }
 });
+*/
 
 /**
  * Handles user sign up
  */
+/* // In order to avoid further registrations
 router.post('/register', function (req, res) {
 	// check, that a username and email is not already taken
     User.register(new User({ username: req.body.username, email: req.body.email, active: false }), req.body.password, function (err, user) {
@@ -104,8 +107,9 @@ router.post('/register', function (req, res) {
         }
     });
 });
+*/
 
-
+/* // In order to avoid further registrations
 // allows user to verify with a secret token
 router.get('/verification', (req,res) => {
 	if (req.isAuthenticated()) {
@@ -114,7 +118,10 @@ router.get('/verification', (req,res) => {
         res.render('auth/verification');
     }
 });
+*/
 
+
+/* // In order to avoid further registrations
 // to process the secret token and activate the user
 router.post('/verification', (req, res) => {
 
@@ -180,6 +187,7 @@ router.post('/verification', (req, res) => {
 		}
 	});
 });
+*/
 
 // page to recover lost passwords
 router.get('/password', (req, res) => {
@@ -321,15 +329,19 @@ router.get('/logout', middleware.isLoggedIn, function (req, res) {
     res.redirect('/');
 });
 
+/* // In order to avoid messages - does not work anyway, yet
 router.get('/contact', (req, res) =>{
 	res.render('auth/contact');
 });
+*/
 
+/* // In order to avoid messages - does not work anyway, yet
 router.post('/contact', (req,res) => {
 	// TODO: check if a correct email was given
 	winston.info('A message was sent from the contact form from a not logged in user.');
 	req.flash('success', 'Your message has been received and we will soon answer you.');
 	res.redirect('/');
 });
+*/
 
 module.exports = router;
