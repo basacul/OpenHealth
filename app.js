@@ -78,6 +78,7 @@ mongoose.connect(process.env.DATABASEURL || localDB, { useNewUrlParser: true, us
 const authRoutes = require('./routes/auth'),
     privateRoutes = require('./routes/private'),
     homeRoutes = require('./routes/home'),
+	emergencyRoutes = require('./routes/emergency'),
     eRecordRoutes = require('./routes/e-record'),
     accountRoutes = require('./routes/account'),
 	angularRoutes = require('./routes/manangular');
@@ -85,6 +86,7 @@ const authRoutes = require('./routes/auth'),
 app.use('/', authRoutes);
 app.use('/private', privateRoutes);
 app.use('/home', homeRoutes);
+app.use('/emergency', emergencyRoutes);
 app.use('/e-record', eRecordRoutes);
 app.use('/account', accountRoutes);
 app.use('/manangular', angularRoutes);

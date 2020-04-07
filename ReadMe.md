@@ -57,7 +57,7 @@ In order to use the prototype:
 
 ```
 Install node.js before running this commands
-> git clone https://github.com/basacul/Mana.git
+> git clone https://github.com/basacul/OpenHealth.git
 > cd Mana
 > npm install
 > npm run start
