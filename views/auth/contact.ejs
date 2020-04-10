@@ -1,13 +1,42 @@
 <% include partials/header %>
 
-<div class="card-body">
-	<form method='POST' action='/contact'>
-		<div class="input-group form-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text"><span class="glyphicon glyphicon-envelope"></span></span>
+	<!-- messages to the user on top -->
+		<form method='POST' action='/contact'>
+		<div class='login-div'>
+			<div class='logo'></div>
+			<div class='title'>OpenHealth</div>
+			<div class='sub-title'>ALPHA <br>
+				<% if(error && error.length > 0){ %>
+				<span class="alert">
+					<%= error %>
+				</span>
+				<% } %>
+				<% if(success && success.length > 0){ %>
+				<span class="success">
+					<%= success %>
+				</span>
+				<% } %>
 			</div>
-			<input type="email" name="email" class="form-control" placeholder="your email" required>
+			<div class='fields'>
+				<div class='email'>
+					<svg class="svg-icon" viewBox="0 0 20 20">
+							<path d="M17.388,4.751H2.613c-0.213,0-0.389,0.175-0.389,0.389v9.72c0,0.216,0.175,0.389,0.389,0.389h14.775c0.214,0,0.389-0.173,0.389-0.389v-9.72C17.776,4.926,17.602,4.751,17.388,4.751 M16.448,5.53L10,11.984L3.552,5.53H16.448zM3.002,6.081l3.921,3.925l-3.921,3.925V6.081z M3.56,14.471l3.914-3.916l2.253,2.253c0.153,0.153,0.395,0.153,0.548,0l2.253-2.253l3.913,3.916H3.56z M16.999,13.931l-3.921-3.925l3.921-3.925V13.931z"></path>
+					</svg><input type="text" name="email" class="email-input" placeholder="email" required>
+				</div>
+				<div class='message'>
+					<textarea class="contact-textarea" name="message" placeholder="Your message to us..."></textarea>
+				</div>
+			</div>
+			<input type='submit' value="Send" class='request-button'>
+			<button class='cancel-button'><a href='/'>Cancel</a></button>
 		</div>
+		</form>
+
+<% include partials/footer %>
+
+<!--
+
+
 
 		 <div class="input-group form-group">
 			<label for="f-message" class="sr-only">Message</label>
@@ -22,7 +51,6 @@
 				<a class="btn btn_own_style" href='/'>Cancel</a>
 			</div>
 		</div>
-	</form>
-</div>
 
-<% include partials/footer %>
+
+-->
