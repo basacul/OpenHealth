@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+
+body {
+	font-family: 'Lato', sans-serif;
+	font-weight: 700;
+	position: relative;
+}
+
+form {
+	margin-bottom: 6em;
+}
+
+.form-bottom {
+	width: 100%;
+	margin-left: 5px;
+}
+
+.submit-button {
+	margin: 10px 25% 10px 25%; 
+	width: 100%;
+	border-color: blue;
+	border-radius: 4px;
+}
+
+.show-exam{
+	margin-bottom: 8em;
+}
+footer {
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   margin-top: 3em;
+   padding-top: 1em;
+   background-color: #ecf0f3;
+   color: #555;
+
+
+   /* background-color: #252526; */
+}

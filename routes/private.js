@@ -131,7 +131,7 @@ router.post("/", middleware.isLoggedIn, middleware.upload.single('upload'), (req
 
 });
 
-// EDIT ROUTE SHOULD ALLOW UPLOAD FOR REAL FILES ********************************* !!!
+
 // SHOW and EDIT ROUTE with button and modal form
 router.get("/:id", middleware.isLoggedIn, middleware.checkOwnership, function (req, res) {
     File.findById(req.params.id, function (err, foundFile) {

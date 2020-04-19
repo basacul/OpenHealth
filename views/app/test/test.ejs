@@ -1,0 +1,113 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container" id="mainNavigation">    
+		<label for="f-upload" class="custom-file-upload">
+			<input type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="create">
+		</label>
+    </div>
+</nav>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/tests" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Create New Test</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="f-topic" class="sr-only">Topic</label>
+                        <input type="text" class="form-control" name="topic" id="f-topic"
+                            placeholder="Enter a topic" required>
+                    </div>
+
+               		<!-- a form that adds one question after the other: need javascript -->
+					
+                    <div class="form-group">
+                        <label for="f-description" class="sr-only">Description</label>
+                        <textarea class="form-control" name="description" id="f-description" rows="3"
+                            placeholder="The description"></textarea>
+                    </div>
+				  	
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <div class="container">
+        <div class="col-md-12 pt-4 mt-0">
+
+			<h3 id="test">Tests available for <%= currentUser.username %></h3>
+
+			<!-- retrieve all available tests -->
+			<% if (tests.length > 0) { %>
+			<ul>
+				<% tests.forEach(function(test){ %>
+				<li>
+					<a href="/tests/<%=test._id%>"><%=test.topic%></a>
+					<ul>
+						<li><%= test.description %></li>
+					</ul>
+				</li>
+				<% }) %>
+			</ul>
+			<% }else{ %>
+			<p>Here you can create new tests. Just click the create button to get started!</p>
+			<% } %>
+
+
+
+        </div>
+		
+		<div class="col-md-12 pt-4 mt-0">
+
+			<h3 id="test">Performed exams by <%= currentUser.username %></h3>
+
+			<!-- retrieve all available tests -->
+			<% if (exams.length > 0) { %>
+			<ul>
+				<% exams.forEach(function(exam){ %>
+				<li>
+					<a href="/tests/exams/<%=exam._id%>">An exam</a>
+				</li>
+				<% }) %>
+			</ul>
+			<% }else{ %>
+			<p>Just take an exam and your results will be available from here.</p>
+			<% } %>
+
+
+
+        </div>
+    </div>
+
+
+	<footer>
+		
+		<div class="container">
+			<p class="text-left">
+				All images are copyright to their owners. 
+				<span class="pull-right">&copy; 2020 Copyright Openhealth.care</span>
+			</p>
+		</div>
+
+	</footer>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap-4.3.1-dist/bootstrap.js"></script>
+
+
+</body>
+
+</html>

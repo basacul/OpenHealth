@@ -1,0 +1,158 @@
+<% include ../partials/header %>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark d-block" id="second_navbar">
+    <div class="container" id="mainNavigation">    
+		<label for="f-upload" class="custom-file-upload">
+			<input type="button" data-toggle="modal" data-target="#myModal" class="btn btn-info" value="add">
+		</label>
+    </div>
+</nav>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/tests/<%=test._id%>?_method=PUT" method="POST">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add A Question</h4>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="f-question" class="sr-only">Question</label>
+                        <input type="text" class="form-control" name="question" id="f-question"
+                            placeholder="Enter a question" required>
+						
+						<label for="f-field" class="sr-only">Field</label>
+                        <input type="text" class="form-control" name="field" id="f-field"
+                            placeholder="Enter medical field" required>
+						
+						<label for="f-answer1" class="sr-only">Answer 1</label>
+                        <input type="text" class="form-control" name="answer1" id="f-answer1"
+                            placeholder="Enter first answer" required>
+						
+						<label for="f-answer2" class="sr-only">Answer 2</label>
+                        <input type="text" class="form-control" name="answer2" id="f-answer2"
+                            placeholder="Enter second answer" required>
+						
+						<label for="f-answer3" class="sr-only">Answer 3</label>
+                        <input type="text" class="form-control" name="answer3" id="f-answer3"
+                            placeholder="Enter third answer" required>
+						
+						<label for="f-answer4" class="sr-only">Answer 4</label>
+                        <input type="text" class="form-control" name="answer4" id="f-answer4"
+                            placeholder="Enter fourth answer" required>
+						
+						<label for="f-solution" class="sr-only">Solution</label>
+                        <input type="text" class="form-control" name="solution" id="f-solution"
+                            placeholder="Enter the solution" required>
+                    </div>
+
+               		<!-- a form that adds one question after the other: need javascript -->
+					<!--
+                    <div class="form-group">
+                        <label for="f-question" class="sr-only">Notes</label>
+                        <textarea class="form-control" name="question[question]" id="f-question" rows="3"
+                            placeholder="The question"></textarea>
+                    </div>
+				  	-->
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <div class="container">
+        <div class="col-md-12 pt-4 mt-0 show-exam">
+
+			<h3 id="test">Your results of the exam <%= test.topic.toUpperCase() %></h3>
+			<p>
+				Number of correct answers: <%= exam.correct %><br>
+				Number of questions : <%= test.number %><br>
+				Result: <%= exam.correct / test.number * 100 %> Percent
+			</p>
+			
+			<h4>
+				Summary of your exam:
+			</h4>
+			
+			<% if(exam.answers.length > 0 && test.questions.length > 0){ %>
+				
+				<% exam.answers.forEach(function(examAnswer){ %>
+					<% test.questions.forEach(function(question){ %>
+						
+						<% if(examAnswer.id == question._id.toString()){ %> 
+							<% if(examAnswer.correct){ %>
+					
+						<div class="card text-white bg-dark mt-3 border-success">
+
+							<% }else{ %>
+
+							<div class="card text-white bg-dark mt-3 border-danger">
+
+							<% } %>
+							<div class="card-header d-flex justify-content-between" style="background-color: black">
+								<%= question.question %>
+							</div>
+								
+						<ul class="list-group list-group-flush">
+							<% question.answers.forEach(function(answer){ %>
+								<!-- <li class="list-group-item bg-dark border-right border-bottom border-left border-dark text-success">
+									<%= answer.id %> : <%= question.solution %> : <%= examAnswer.answered %>
+								</li> -->
+								<% if(answer.id == question.solution && answer.id == examAnswer.answered){ %>
+									<li class="list-group-item bg-dark border-right border-bottom border-left border-dark text-success">
+										<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>" checked="checked"> <%= answer.answer %>
+								<% }else if(answer.id == question.solution && examAnswer.answered !== answer.id){ %>
+									<li class="list-group-item bg-dark border-right border-bottom border-left border-dark text-success">
+										<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>"> <%= answer.answer %>
+								<% }else if(answer.id !== question.solution && answer.id == examAnswer.answered){ %>
+									<li class="list-group-item bg-dark border-right border-bottom border-left border-dark text-danger">
+										<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>" checked="checked"> <%= answer.answer %>
+								<% }else{ %>
+									<li class="list-group-item bg-dark border-right border-bottom border-left border-dark">
+										<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>"> <%= answer.answer %>
+								<% } %>
+									</li>
+							<% }) %>
+
+						</ul>
+						<% } %>
+					<% }) %>
+					</div>
+				<% }) %>
+				
+			<% } %>
+			
+			
+		
+
+        </div>
+    </div>
+
+
+	<footer>
+		
+		<div class="container">
+			<p class="text-left">
+				All images are copyright to their owners. 
+				<span class="pull-right">&copy; 2020 Copyright Openhealth.care</span>
+			</p>
+		</div>
+
+	</footer>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap-4.3.1-dist/bootstrap.js"></script>
+
+
+</body>
+
+</html>

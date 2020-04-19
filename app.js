@@ -40,7 +40,7 @@ app.use(expressSanitizer()); // this line after app.use(bodyParser.urlencoded({ 
 
 
 /**
- * THese two methods are really important : 
+ * These two methods are really important : 
  * Deserialize: for reading the session, taking the data from the session and 
  * decoding it
  * Serialize: encodes the data. 
@@ -77,6 +77,7 @@ mongoose.connect(process.env.DATABASEURL || localDB, { useNewUrlParser: true, us
 // =============================================================================================
 const authRoutes = require('./routes/auth'),
     privateRoutes = require('./routes/private'),
+	testRoutes = require('./routes/test'),
     homeRoutes = require('./routes/home'),
 	emergencyRoutes = require('./routes/emergency'),
     eRecordRoutes = require('./routes/e-record'),
@@ -85,6 +86,7 @@ const authRoutes = require('./routes/auth'),
 
 app.use('/', authRoutes);
 app.use('/private', privateRoutes);
+app.use('/tests', testRoutes);
 app.use('/home', homeRoutes);
 app.use('/emergency', emergencyRoutes);
 app.use('/e-record', eRecordRoutes);
@@ -98,7 +100,7 @@ app.get('*', function (req, res) {
 });
 
 app.listen(process.env.PORT || localPort, () => {
-    console.log(`Running... `);
+    console.log(`Running on https://openhealth.run.goorm.io`);
 });
 
 

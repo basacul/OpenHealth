@@ -9,15 +9,16 @@
     </title>
     <link rel="shortcut icon" href="/img/favicon.ico" sizes="32x32">
     <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/bootstrap-4.3.1-dist/bootstrap.css">
-    <link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/bootstrap-4.3.1-dist/bootstrap.css">
+	<link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<span class="d-none d-lg-inline"><a href="/home"><img src="/img/mana_logo.png"
-							alt="Logo of the project Mana" id="logo"></a></span>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<span class="d-none d-lg-inline"><a href="/home"><img src="/img/ohc_logo_small.png"
+							alt="Logo of the project Openhealth" id="logo"></a></span>
 			<div class="container">
 				<% if(error && error.length > 0){ %>
 				<div class="row overlay">
@@ -46,6 +47,8 @@
 									<%= currentUser.username %>
 								</a>
 							</li>
+							<li class="nav-item"><a class="nav-link" href="/tests"><span
+										class="glyphicon glyphicon-tower"></span> Tests</a></li>
 							<li class="nav-item"><a class="nav-link" href="/emergency"><span
 										class="glyphicon glyphicon-fire"></span> Emergency</a></li>
 							<li class="nav-item"><a class="nav-link" href="/private"><span

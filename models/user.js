@@ -15,7 +15,13 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "File"
         }
-    ]
+    ],
+	exams: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Exam"
+		}
+	]
 });
 
 // takes the passport-local package and adds a bunch of methods

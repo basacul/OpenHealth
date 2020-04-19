@@ -6,4 +6,3 @@ module.exports = {
 	aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY || secretAccessKey,
 	region: 'eu-central-1'
 }
-
