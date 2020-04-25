@@ -2,13 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router(); // now instead of app, use router
 const middleware = require('../middleware');
-const hlf = require('../utils/hyperledger');
-const Mana = require('../models/mana');
-const File = require('../models/file');
 const User = require('../models/user');
-const winston = require('../config/winston');
-const aws = require('../utils/aws');
-const download = require('../config/download');
+
 
 /**
 * Main emergency website with main information

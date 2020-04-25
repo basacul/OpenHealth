@@ -1,10 +1,4 @@
 module.exports = {
 	MAILGUN_USER: '',
-	MAILGUN_PASS: ''
+	MAILGUN_PASS: 'b'
 };
-
-
-// module.exports = {
-// 	DOMAIN: '',
-// 	API_KEY: ''
-// };

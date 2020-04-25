@@ -3,8 +3,6 @@
 // =============================================================================================
 const express = require('express'),
     app = express(),
-	morgan = require('morgan'),
-	winston = require('./config/winston'),
     mongoose = require('mongoose'),
     flash = require('connect-flash'),
     passport = require('passport'),
@@ -26,10 +24,6 @@ app.use(require('express-session')({
 }));
 
 
-app.use(morgan('combined',{ 
-	stream: winston.stream, 
-	skip: (req, res) => { return res.statusCode < 400 } // otherwise the app.log is full of any request
-}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -76,22 +70,17 @@ mongoose.connect(process.env.DATABASEURL || localDB, { useNewUrlParser: true, us
 // ROUTES
 // =============================================================================================
 const authRoutes = require('./routes/auth'),
-    privateRoutes = require('./routes/private'),
 	testRoutes = require('./routes/test'),
     homeRoutes = require('./routes/home'),
 	emergencyRoutes = require('./routes/emergency'),
-    eRecordRoutes = require('./routes/e-record'),
-    accountRoutes = require('./routes/account'),
-	angularRoutes = require('./routes/manangular');
+    accountRoutes = require('./routes/account');
 
 app.use('/', authRoutes);
-app.use('/private', privateRoutes);
-app.use('/tests', testRoutes);
 app.use('/home', homeRoutes);
-app.use('/emergency', emergencyRoutes);
-app.use('/e-record', eRecordRoutes);
 app.use('/account', accountRoutes);
-app.use('/manangular', angularRoutes);
+app.use('/tests', testRoutes);
+app.use('/emergency', emergencyRoutes);
+
 
 
 // DEFAULT ROUTE IF NOTHING ELSE MATCHES

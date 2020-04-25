@@ -9,13 +9,6 @@ const userSchema = new mongoose.Schema({
 	email: {type: String, unique: true, required: true}, // TODO: Protect it but used for verification and resets
 	active: Boolean, 
 	token: String,
-    // TODO: files are encrypted with password
-    files: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "File"
-        }
-    ],
 	exams: [
 		{
 			type: mongoose.Schema.Types.ObjectId,

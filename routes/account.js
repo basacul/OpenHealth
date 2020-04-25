@@ -2,56 +2,28 @@ const express = require('express');
 const router = express.Router(); // now instead of app, use router
 const middleware = require('../middleware');
 const User = require('../models/user');
-const File = require('../models/file');
-const Privacy = require('../models/privacy');
-const Mana = require('../models/mana');
-const hlf = require('../utils/hyperledger');
+const Exam = require('../models/exam');
+const Test = require('../models/test');
 const mailer = require('../utils/mailer');
 const template = require('../utils/templates');
-const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
 const email_for_dev = 'antelo.b.lucas@gmail.com';
 
-// to remove the folders if the user wants to delete account
-const fs = require('fs'); 
-const dir = 'encrypted/users';
-const deleteFolderRecursive = function(path) {
-  if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
-};
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
-	Privacy.findOne({user: req.user._id}, (err, privacy) => {
-		if(err){
-			winston.error()
-			req.flash('error', 'Please try later...');
-			res.redirect('/home');
-		}else{
-			 res.render("app/account", {privacy: privacy});
-		}
-	})
-   
+
+	res.render("app/account/account");
+	
 });
 
 router.put("/password", middleware.isLoggedIn, (req, res)=> {
 	
 	User.findById(req.user._id, function(err, user){
 		if(err){
-			winston.error(err.message);
 			req.flash('error', 'Something went wrong. Try again later.');
 			res.redirect('back');
 		} else if(!user){
-			winston.error('Logged in user not found when resetting the password');
 			req.flash('error', 'Your account not found.');
 			res.redirect('back');
 		}else{
@@ -70,7 +42,6 @@ router.put("/password", middleware.isLoggedIn, (req, res)=> {
 
 						}
 					} else {
-						winston.info('A new password has been set by a user.');
 						req.flash('success','Your password has been updated.' );
 					}
 					
@@ -89,23 +60,7 @@ router.put("/password", middleware.isLoggedIn, (req, res)=> {
 	});	
 });
 
-router.put("/privacy", middleware.isLoggedIn, (req, res)=> {
-	let privacy_settings = sanitize_privacy(req);
-	
-	
-	Privacy.findOneAndUpdate({user: req.user._id}, privacy_settings, (err, privacy) => {
-		if(err){
-			winston.error(err.message);
-			req.flash('error', 'Could not update privacy settings.');
-		}else{
-			winston.info('Privacy settings were updated.');
-			req.flash('success', 'Privacy settings updated.');
-		}
-		res.redirect('/account');
-	})
-	
-	
-});
+
 
 router.post('/token', middleware.isLoggedIn, (req, res) => {
 
@@ -113,49 +68,21 @@ router.post('/token', middleware.isLoggedIn, (req, res) => {
 
 	// mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your current token', html);
 	mailer.sendEmail('donotreply@openhealth.care', email_for_dev , 'Your current token', html).then(info => {
-		winston.info('Token request from auth.js by a user.');
+		console.log('Token request from auth.js by a user.');
 	}).catch(error => {
-		winston.error('Error when sending email for token reset');
 		console.log(error.message);
 		req.flash('error', 'Email could not be sent.');
 	});
 	
-	winston.info('The current token was requested by a user.');
 	req.flash('success', `Token sent to ${req.user.email}`);
 	res.redirect('back');	
 	
-});
-
-// TODO: Implement the logic to correctly handle the data request
-router.post('/data', middleware.isLoggedIn, (req,res) => {
-	const wantsSummary = sanitize_data_request(req);
-	
-	if(wantsSummary){
-		winston.info('A data request was performed asking for a summary.');
-	}else{
-		winston.info('A data request was performed asking full disclosure.');
-	}
-	
-	const html = template.data(req.user.username, req.user.email, wantsSummary);
-	
-	// mailer.sendEmail('donotreply@openhealth.care', req.user.email, 'Your data request', html);
-	mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Your data request', html).then(info => {
-		winston.info('Data request from account.js by a user.');
-	}).catch(error => {
-		winston.error('Error when sending email for data  request');
-		console.log(error.message);
-		req.flash('error', 'Email could not be sent.');
-	});
-	
-	req.flash('success', 'Your request will be processed.');
-	res.redirect('back');
 });
 
 router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 	
 	User.findOneAndRemove({token: req.body.token}, (err, user) => {
 		if (err) {
-			winston.error(err.message);
 			req.flash('error', 'Something went wrong with account.');
 			res.redirect('back');
 		}else{
@@ -163,79 +90,18 @@ router.delete('/delete', middleware.isLoggedIn,  (req,res) => {
 				req.flash('error', 'Please provide the correct token.');
 				res.redirect('back');
 			}else{
-				Privacy.findOneAndRemove({user: user._id}, (err, privacy) => {
-					if(err){
-						winston.error(err.message);
-					}
-					winston.info("Removed respective privacy object in mongodb.");
+				// TODO: REMOVE EXAMS AND TESTS OF THE USER
+				user.exams.forEach(function(exam){
+					console.log(exam);
 				});
 				
-				// TODO: Update Hyperledger Fabric
-				Mana.findOneAndRemove({user: user._id}, (err, mana) => {
-					if(err){
-						winston.error(err.message);
-					}
-					winston.info("Removed respective mana object in mongodb.");
-					
-					// TODO: delete all items by the user and remove authorization and links form all associations
-					hlf.deleteById(hlf.namespaces.user, mana._id).then(response => {
-						if(response.status >= 200 && response.status < 300){
-							// TODO: Remove all associated items and associations by this user
-							winston.info("Removed respective participant in hlf");
-							console.log(response.status);
-							console.log('successfully removed participant in hlf');
-						}else{
-							console.log(response.status);
-							console.log('not succesful in removing participant in hlf');
-						}
-					}).catch(error => {
-						winston.error(error.message);
-						console.log('not succesful in removing participant in hlf');
-					})
-				});
-				
-				
-				
-				// TODO: Update Hyperledger Fabric
-				File.deleteMany({ owner : {id: user._id, username: user.username} }, function (err) {
-					if(err){
-						winston.error(err.message);
-						req.flash('error', 'Something went wrong with files.');
-						return res.redirect('back');
-					}else{
-						const path = `${dir}/${req.user.username}`;
-						deleteFolderRecursive(`${dir}/${req.user.username}`);
-						req.flash('success', 'Your account and files were deleted.');
-						req.logout();
-						winston.info('A user profile was deleted and logged out.');
-						res.redirect('/');
-					}
-				});
-				
+				req.flash('success', 'Your account and exams were deleted.');
+				req.logout();
+				res.redirect('/');
 			}
-			
-			
 		} 
 	});
 });
 
-function sanitize_privacy(req) {
-	if(req.body.privacy){
-		req.body.privacy.notify = req.body.privacy.notify ? true : false;
-		req.body.privacy.personalize = req.body.privacy.personalize ? true : false;
-		req.body.privacy.research = req.body.privacy.research ? true : false;
-		req.body.privacy.providers = req.body.privacy.providers ? true : false;
-		req.body.privacy.insurance = req.body.privacy.insurance ? true : false;
-		return req.body.privacy;
-	}else{
-		return {notify: false, personalize: false, research: false, providers: false, insurance: false};
-	}
-
-}
-
-function sanitize_data_request(req){
-	req.body.summary = req.body.summary ? true : false;
-	return req.body.summary;
-}
 
 module.exports = router;

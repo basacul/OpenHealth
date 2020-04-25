@@ -6,7 +6,6 @@ const User = require('../models/user');
 const Test = require('../models/test');
 const Question = require('../models/question');
 const Exam = require('../models/exam');
-const winston = require('../config/winston');
 
 /* INDEX TEST
 	displays all available tests */
@@ -16,7 +15,7 @@ router.get('/', middleware.isLoggedIn, (req, res) => {
 	
 	Test.find({},  function(error, tests) {
 		if(error){
-			winston.error("Something went wrong when requesting test");
+			console.log("Something went wrong when requesting test");
 			req.flash('error', 'Could not retrieve tests.');
 		}else{
 			test = tests;
@@ -40,12 +39,12 @@ router.post('/', middleware.isLoggedIn, (req, res) =>{
 	
 	if (!req.body.topic) {
         const errorBody = new Error('Provide a topic.'); 
-		winston.error(errorBody.message);
+		console.log(errorBody.message);
 		req.flash('error', errorBody.message);
     } else {
 		Test.create(req.body, function(err, newTest){
 			if(err){
-				winston.error(err.message);
+				console.log(err.message);
 				req.flash(err.message);
 			}else{
 				newTest.topic = req.body.topic;
@@ -69,12 +68,12 @@ router.get('/:id', middleware.isLoggedIn, function(req, res){
 	// need to populate questions array and execute due to lazy loading
 	Test.findById(req.params.id).populate('questions').exec(function (err, foundTest){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash('error', err.message);
 			res.redirect('back');
 		}else if(!foundTest){
 			const msg = "Test does not exist";
-			winston.error(msg);
+			console.log(msg);
 			req.flash('error', msg);
 			res.redirect('back');
 		}else{
@@ -92,7 +91,7 @@ development will implement for questions
 router.put('/:id', middleware.isLoggedIn, function(req, res){
 	Question.create(req.body, function(err, newQuestion){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash(err.message);
 		}else{
 			newQuestion.question = req.body.question;
@@ -106,7 +105,7 @@ router.put('/:id', middleware.isLoggedIn, function(req, res){
 			newQuestion.solution = req.body.solution;
 			Test.findById(req.params.id, function(errTest, foundTest){
 				if(errTest){
-					winston.error(err.message);
+					console.log(err.message);
 					req.flash('error', err.message);
 					res.redirect('/');
 				}else{
@@ -119,7 +118,7 @@ router.put('/:id', middleware.isLoggedIn, function(req, res){
 						foundTest.save();
 						req.flash('success', `Question created and added.`);
 					}else{
-						winston.error('Test NOT found to push question to questions array.');
+						console.log('Test NOT found to push question to questions array.');
 						req.flash('error', 'Test not found to push question!');
 					}
 				}
@@ -156,7 +155,7 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
 	
 	Exam.create(req.body, function(err, newExam){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash(err.message);
 			res.redirect('/tests');
 		}else{
@@ -167,7 +166,7 @@ router.post('/:id', middleware.isLoggedIn, function(req, res){
 			
 			User.findById(req.user._id, function(errUser, foundUser){
 				if(errUser){
-					winston.error(errUser.message);
+					console.log(errUser.message);
 					req.flash('error', errUser.message);
 					res.redirect('/tests');
 				}else{
@@ -190,13 +189,13 @@ router.get('/exams/:id', middleware.isLoggedIn, function(req, res){
 	let results = [];
 	Exam.findById(req.params.id, function(errExam, foundExam){
 		if(errExam){
-			winston.error(errExam.message);
+			console.log(errExam.message);
 			req.flash('error', errExam.message);
 			res.redirect('back');
 		}else{
 			Test.findById(foundExam.test).populate('questions').exec(function(errTest, foundTest){
 				if(errTest){
-					winston.error(errTest.message);
+					console.log(errTest.message);
 					req.flash('error', errTest.message);
 					res.redirect('back');
 				}else{

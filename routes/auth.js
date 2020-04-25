@@ -1,16 +1,11 @@
 const express = require('express');
 const router = express.Router(); // now instead of app, use router
 const passport = require('passport');
-// TODO: replace cryptoRandomString with crypto!!
-const cryptoRandomString = require('crypto-random-string'); // to generate verification token
+const crypto = require('crypto');
 const mailer = require('../utils/mailer');
 const template = require('../utils/templates');
 const User = require('../models/user');
-const Privacy = require('../models/privacy');
-const Mana = require('../models/mana');
 const middleware = require('../middleware');
-const hlf = require('../utils/hyperledger');
-const winston = require('../config/winston');
 
 // email_for_dev should be replaced with user.email, but with MailGun I can only send mails to myself, yet
 const email_for_dev = 'antelo.b.lucas@gmail.com';
@@ -61,7 +56,7 @@ router.post('/register', function (req, res) {
 	// check, that a username and email is not already taken
     User.register(new User({ username: req.body.username, email: req.body.email, active: false }), req.body.password, function (err, user) {
         if (err) {
-            winston.error(err.message);
+            console.log(err.message);
 			if(err.message.includes('email')){
 				req.flash('error', 'Please, provide a different email.'); // as the err message is too abstract
 			}else{
@@ -71,20 +66,9 @@ router.post('/register', function (req, res) {
             res.redirect('/register');
         } else {
 					
-			// Create Privacy DB OBject
-			Privacy.create({user: user._id}, (err, privacy) => {
-				if(err){
-					winston.error(err.message);
-					
-				}else{
-					winston.info('A new privacy object created upon registration.');
-					
-				}
-			});
-			
 			
 			// 1. generate secret token 
-			user.token = cryptoRandomString({length: 32, type: 'base64'});
+			user.token = crypto.randomBytes(6).toString('hex');
 			user.save();
 			
 			// 2. compose the email
@@ -94,9 +78,9 @@ router.post('/register', function (req, res) {
 			// 3. and send email. this function returns a promise
 			// mailer.sendEmail('registration@openhealth.care', user.email, 'Verify your account', html);
 			mailer.sendEmail('registration@openhealth.care', email_for_dev , 'Verify your account', html).then(info => {
-				winston.info('Email for verification sent.');
+				console.log('Email for verification sent.');
 			}).catch(error => {
-				winston.error('Error when sending email for verification.');
+				console.log('Error when sending email for verification.');
 				console.log(error.message);
 				req.flash('error', 'Email could not be sent.');
 			});
@@ -127,7 +111,7 @@ router.post('/verification', (req, res) => {
 
 	User.findOne({token: req.body.token}, function(err, user){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash('error', 'Something went wrong. Try again later.');
 			res.redirect('back');
 		}if(!user){
@@ -139,7 +123,7 @@ router.post('/verification', (req, res) => {
 			
 			if(user.active){
 				
-				winston.info('User account was already verified in the verification process.');
+				console.log('User account was already verified in the verification process.');
 				req.flash('success', 'Your account has already been verified. Please log in.');
 				res.redirect('/');
 				
@@ -149,31 +133,7 @@ router.post('/verification', (req, res) => {
 					user.active = true;
 					user.save();
 
-					winston.info('User account was verified.');
-
-					
-					// TODO: Create participant in Hyperledger Fabric and store the appropriate participant in mana
-					Mana.create({user: user._id}, (errMana, mana) => {
-						if(errMana){
-							winston.error(err.message);
-							console.log('Something went wrong when creating a new mana object.');
-						}else{
-							
-							hlf.createUser(mana._id.toString(), 'CLIENT' ).then(response => {
-								body = response.data;
-								winston.info('Hyperledger updated with new participant')
-							}).catch(error => {
-								console.log(error);
-								winston.error(error.message);
-							});
-						
-							
-							winston.info('A new mana object created upon registration.');
-							console.log('Privacy object created with: ');
-							console.log(mana);
-						}
-					});
-					
+					console.log('User account was verified.');
 
 					req.flash('success', `Verification successful. You can now log in.`);
 					res.redirect('/');
@@ -205,7 +165,7 @@ router.post('/password', (req, res) => {
 	
 	User.findOne({username: req.body.username}, function(err, user){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash('Something went wrong. Try again later.');
 			res.redirect('back');
 		}else if(!user){
@@ -223,14 +183,14 @@ router.post('/password', (req, res) => {
 				// 3. and send email. this function returns a promise
 				// mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html);
 				mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html).then(info => {
-					winston.info('Password change request from auth.js by a user with a token.');
+					console.log('Password change request from auth.js by a user with a token.');
 				}).catch(error => {
-					winston.error('Error when sending email for password reset');
+					console.log('Error when sending email for password reset');
 					console.log(error.message);
 					req.flash('error', 'Email could not be sent.');
 				});
 				
-				winston.info('Password change request from auth.js by a user with a valid token.');
+				console.log('Password change request from auth.js by a user with a valid token.');
 				req.flash('success', 'You will shortly receive an email to set a new password');
 				res.redirect('/reset');
 				
@@ -241,7 +201,7 @@ router.post('/password', (req, res) => {
 				}else if(req.body.email === user.email){
 					
 					// 1. generate new secret token
-					user.token = cryptoRandomString({length: 32, type: 'base64'});
+					user.token = crypto.randomBytes(6).toString('hex');
 					// TODO: HOW TO MAKE PREVIOUS PASSWORD UNUSABLE
 					user.active = false;
 					user.save();
@@ -249,9 +209,9 @@ router.post('/password', (req, res) => {
 					const html = template.reset(user.username, user.email, user.token);
 					// mailer.sendEmail('donotreply@openhealth.care', user.email, 'Reset your password', html);
 					mailer.sendEmail('donotreply@openhealth.care', email_for_dev, 'Reset your password', html).then(info => {
-						winston.info('Password change request from auth.js by a user without a token.');
+						console.log('Password change request from auth.js by a user without a token.');
 					}).catch(error => {
-						winston.error('Error when sending email for password reset');
+						console.log('Error when sending email for password reset');
 						console.log(error.message);
 						req.flash('error', 'Email could not be sent.');
 					});
@@ -282,7 +242,7 @@ router.get('/reset', (req, res) => {
 router.post('/reset', (req, res) => {
 	User.findOne({token: req.body.token}, function(err, user){
 		if(err){
-			winston.error(err.message);
+			console.log(err.message);
 			req.flash('error', 'Something went wrong. Try again later.');
 		}else if(!user){
 			
@@ -296,7 +256,7 @@ router.post('/reset', (req, res) => {
 					
 					user.setPassword(req.body.password, err => {
 						if(err){
-							winston.error(err.message);
+							console.log(err.message);
 							req.flash('error', 'New password could not be set by our application.');
 							return res.redirect('/');
 						}else{
@@ -305,7 +265,7 @@ router.post('/reset', (req, res) => {
 						}
 					});
 
-					winston.info('Password reset succesfully performed by a user.');
+					console.log('Password reset succesfully performed by a user.');
 					req.flash('success', `Password reset was successful. You can now log in.`);
 					res.redirect('/');
 				}else{
@@ -323,7 +283,7 @@ router.post('/reset', (req, res) => {
 	});
 });
 
-router.get('/logout', middleware.isLoggedIn, function (req, res) {
+router.get('/checkout', middleware.isLoggedIn, function (req, res) {
     req.logout();
     req.flash('success', 'Successfully logged you out');
     res.redirect('/');
@@ -338,7 +298,7 @@ router.get('/contact', (req, res) =>{
 // In order to avoid messages - does not work anyway, yet
 router.post('/contact', (req,res) => {
 	// TODO: check if a correct email was given
-	winston.info('A message was sent from the contact form from a not logged in user.');
+	console.log('A message was sent from the contact form from a not logged in user.');
 	req.flash('success', 'Your message has been received and we will soon answer you.');
 	res.redirect('/');
 });
