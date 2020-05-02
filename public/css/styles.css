@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
 
-body {
+* {
 	font-family: 'Lato', sans-serif;
 	font-weight: 700;
+}
+
+body {
 	position: relative;
+	color: #555;
+}
+
+#logo {
+  /* margin-right: -8em; */
+  width: 50px;
+  height: 50px;
 }
 
 form {
@@ -16,15 +26,55 @@ form {
 }
 
 .submit-button {
-	margin: 10px 25% 10px 25%; 
+	margin-top: 2rem;
+	outline: none;
+	cursor: pointer;
+	border: none;
 	width: 100%;
-	border-color: blue;
-	border-radius: 4px;
+	height: 60px;
+	font-size: 20px;
+	text-align: center;
+	color: #fff;
+	background: #2fdcc6;
+	border-radius: 30px;
+	box-shadow: 3px 3px 8px #b1b1b1,
+				-3px -3px 8px #ffffff;
+	transition: 0.5s;
+}
+
+
+.submit-button:hover {
+	background: #4ed34e;
+}
+
+.submit-button:active {
+	background: #1da88a;
 }
 
 .show-exam{
 	margin-bottom: 8em;
 }
+
+.neomorphic-box {
+	background: #ecf0f3;
+	box-shadow:	 13px 13px 20px #cbced1,
+				-13px -13px 20px #ffffff;
+}
+
+.link-box {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+.link-box:hover {
+	padding: 0;
+	color: inherit;
+	text-decoration: inherit;
+	display: block;
+	box-shadow: 13px 13px 20px #cbced1,
+				-13px -13px 20px #ffffff;
+}
+
 footer {
    position: fixed;
    bottom: 0;
@@ -33,7 +83,24 @@ footer {
    padding-top: 1em;
    background-color: #ecf0f3;
    color: #555;
+}
 
+/*
+Such that flash messages do not mess with the grid
+*/
+.overlay {
+  position: absolute;
+  top: 0.15rem;
+  left: 6rem; 
+  margin-top: 0.2rem;
+  width: auto;
+  height: 100%;
+  z-index: 10;
+}
 
-   /* background-color: #252526; */
+.overlay .alert {
+  display: table-cell;
+  text-align: center;
+  z-index: 11;
+  font-size: 0.7rem;
 }

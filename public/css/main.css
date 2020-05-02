@@ -30,25 +30,6 @@ footer {
   width: 68px;
 }
 
-#copyrightRow { 
-  /* background-color: #343a40;  */
-  background-color: #1e1e1e;
-  padding: 0.75em 0 0.75em 0; 
-  margin-top: 5px;
-  color: white;
-  border-top: 2px solid #1e1e1e;
-  box-shadow: 0 -5px 5px -5px #111111;
-}
-
-#logo {
-  /* margin-right: -8em; */
-  width: 50px;
-  height: 50px;
-}
-
-.not-shared {
-	border: 2px solid black;
-}
 .form-control {
   background-color: rgb(44, 44, 43);
 }
@@ -94,86 +75,6 @@ a.nav-link:hover {
   /* background-color: #3c4043 !important; */
   /* box-shadow: 0 -5px 5px -5px #252526;
   box-shadow: 0 5px 5px -5px #333333; */
-}
-
-/*stylesheet for table.html*/
-
-form, #message_interact {
-  display: inline-block;
-}
-
-fieldset {
-  border: none;
-}
-
-span.edit {
-  display: inline-block;
-  background: url("../img/edit16.png") no-repeat;
-  width: 14px;
-  height: 14px;
-  padding-right: 5px;
-}
-article{
-  margin: 0 auto;
-}
-div#table {
-   
-  color: black;
-  margin: 2em 0;
-}
-
-
-td {
-  padding: 0.1em;
-  font-style: italic;
-}
-
-th {
-  padding: 0.2em;
-}
-
-
-
-thead {
-    background-color:  black;
-    color: white;
-}
-table {
-  background-color: #333333;
-  width: 100%;
-  margin: 2em auto;
-  border-collapse: collapse;
-  border: 2px solid black;
-}
-tr {
-    border-top: solid 2px black;
-    width: 100%;
-}
-/* 
-tr:nth-child(even) {
-  background-color: #242a30;
-} */
-
-tbody tr:hover {
-  color: white;
-  background-color: rgb(104, 104, 103);
-  height: 100%;
-}
-
-input:focus{
-  outline: 0 0 0 0  !important;
-  box-shadow: 0 0 0 0 !important;
-  
-}
-
-#mainNavigation form, #message_interact{
-  margin-top: 0.3em;
-  padding:0;
-  width: 100%;
-}
-
-#interact {
-	  border-left: 1px solid black;
 }
 
 input, button {
@@ -239,10 +140,7 @@ button[type="button"]{
   padding: 0.1em;
 }
 
-/* .modal {
-  color: black;
-  background-color: rgba(255, 255, 255, 0.2);
-} */
+
 
 .modal-content {
   color: #6c757d;
@@ -253,41 +151,3 @@ button[type="button"]{
   width: 100%;
 }
 
-
-/* cards to display files */
-.list-group-item:hover {
-  background-color: rgb(104, 104, 103);
-  outline: none;
-}
-
-.list-group a {
-  color: black;
-  text-decoration: none;
-}
-
-.input-group-prepend span{
-  width: 50px;
-  border:0;
-  background-color: rgb(44, 44, 43);
-	color: black;
-}
-/*
-Such that flash messages do not mess with the grid
-*/
-.overlay {
-  position: absolute;
-  top: 0.15rem;
-  left: 6rem; 
-  margin-top: 0.2rem;
-  width: auto;
-  height: 100%;
-  /*display: table;*/
-  z-index: 10;
-}
-
-.overlay .alert {
-  display: table-cell;
-  text-align: center;
-  z-index: 11;
-  font-size: 0.7rem;
-}

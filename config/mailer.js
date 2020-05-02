@@ -1,4 +1,4 @@
 module.exports = {
 	MAILGUN_USER: '',
-	MAILGUN_PASS: 'b'
+	MAILGUN_PASS: ''
 };

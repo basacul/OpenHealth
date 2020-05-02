@@ -8,6 +8,39 @@
     </div>
 </nav>
 
+<div class="container">
+	<div class="col-md-12 pt-4 mt-0">
+
+		<h3 id="test"><%= test.topic %></h3>
+		<form action="/tests/<%=test._id%>" method="POST">
+
+		 <% if (test.questions.length > 0) { %>
+			<% test.questions.forEach(function(question){ %>
+			<div class="card mt-5 neomorphic-box">
+				<div class="card-header d-flex justify-content-between">
+					<%= question.question %>
+				</div>
+				<ul class="list-group list-group-flush">
+					<% question.answers.forEach(function(answer){ %>
+					<li class="list-group-item">
+						<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>" required> <%= answer.answer %>
+
+					</li>
+					<% }) %>
+					<input type="hidden" name="solutions[<%=question._id%>]" value="<%=question.solution%>">
+				</ul>
+			</div>
+			<% }) %>
+			
+			<input type='submit' value='Submit' class='submit-button'>
+			
+
+		<% } %>
+		</form>	
+	</div>
+</div>
+
+
 <!-- The Modal -->
 <div class="modal" id="myModal">
     <div class="modal-dialog">
@@ -70,67 +103,5 @@
         </div>
     </div>
 </div>
-    <div class="container">
-        <div class="col-md-12 pt-4 mt-0">
-
-			<h3 id="test"><%= test.topic %></h3>
-			<form action="/tests/<%=test._id%>" method="POST">
-			
-			 <% if (test.questions.length > 0) { %>
-				<% test.questions.forEach(function(question){ %>
-					<div class="card text-white bg-dark mt-3">
-						<div class="card-header d-flex justify-content-between" style="background-color: black">
-							<%= question.question %>
-						</div>
-						<ul class="list-group list-group-flush">
-							<% question.answers.forEach(function(answer){ %>
-								<li class="list-group-item bg-dark border-right border-bottom border-left border-dark">
-							<input type="radio" class="answer" name="answers[<%=question._id%>]" value="<%=answer.id%>" required> <%= answer.answer %>
-								
-							</li>
-							<% }) %>
-							
-							<input type="hidden" name="solutions[<%=question._id%>]" value="<%=question.solution%>">
-						</ul>
-					</div>
-				<% }) %>
-				<div class='form-bottom'>
-					<input type='submit' value='Submit' class='submit-button'>
-				</div>
-				
-			<% } %>
-			</form>	
-			<!--	<ul>
-				<li><%= test._id %></li>
-				<li><%= test.topic %></li>
-				<% if(test.questions.length > 0){ %>
-				<ol>
-				<% test.questions.forEach(function(question){ %>
-				
-					<li>
-						<%= question.field %> : <%= question.question %>
-						<ol>
-						<% question.answers.forEach(function(answer){ %>
-							<li><%= answer %></li> 	   
-						<% }) %>
-							<li>SOLUTION: <%= question.solution %></li>
-						</ol>
-					</li>
-				
-				<% }) %>
-				</ol>
-				<% } else { %>
-					<li>No Questions</li>
-				<% } %>
-				<li><%= test.number %></li>
-				<li><%= test.__v %></li>
-			</ul>
-
-			-->
-
-
-        </div>
-    </div>
-
 
 <% include ../partials/footer %>

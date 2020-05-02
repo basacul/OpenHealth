@@ -53,19 +53,24 @@
 
 			<!-- retrieve all available tests -->
 			<% if (tests.length > 0) { %>
-			<ul>
 				<% tests.forEach(function(test){ %>
-				<li>
-					<a href="/tests/<%=test._id%>"><%=test.topic%></a>
-					<ul>
-						<li><%= test.description %></li>
-					</ul>
-				</li>
+					<a class="link-box" href="/tests/<%=test._id%>">
+					<div class="card bg-light mb-3">
+						<div class="card-header"><%=test.topic%></div>
+						<div class="card-body">
+							<p class="card-text"><%= test.description %></p>
+						</div>
+					</div>
+					</a>
+					<br>
 				<% }) %>
-			</ul>
 			<% }else{ %>
 			<p>Here you can create new tests. Just click the create button to get started!</p>
 			<% } %>
+			
+			
+
+	
 
 
 
