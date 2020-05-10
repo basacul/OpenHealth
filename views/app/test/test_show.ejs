@@ -17,6 +17,11 @@
 		 <% if (test.questions.length > 0) { %>
 			<% test.questions.forEach(function(question){ %>
 			<div class="card mt-5 neomorphic-box">
+				<% if(question.img){ %>
+				<div class="card">
+				  <img class="card-img-top" src="<%=question.img%>" alt="Card image cap">
+				</div>
+				<% } %>
 				<div class="card-header d-flex justify-content-between">
 					<%= question.question %>
 				</div>
@@ -55,33 +60,52 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="f-question" class="sr-only">Question</label>
-                        <input type="text" class="form-control" name="question" id="f-question"
-                            placeholder="Enter a question" required>
+                        <label for="f-type">Type of Question: </label>
+						<select id="f-type">
+							<option name="type" value="A">Type A Question</option>
+							<option name="type" value="B">Type B Question</option>
+							<option name="type" value="C">Type C Question</option>
+							<option name="type" value="D">Type D Question</option>
+						</select>
+						
+						<label for="f-question" class="sr-only">Question</label>
+                        <textarea class="form-control" name="question" id="f-question" rows="2" 
+                            placeholder="Enter a question" required></textarea>
+						<label for="f-image" class="sr-only">Image</label>
+                        <input type="text" class="form-control" name="image" id="f-image"
+                            placeholder="Enter url to the image (optional)">
 						
 						<label for="f-field" class="sr-only">Field</label>
                         <input type="text" class="form-control" name="field" id="f-field"
                             placeholder="Enter medical field" required>
 						
 						<label for="f-answer1" class="sr-only">Answer 1</label>
-                        <input type="text" class="form-control" name="answer1" id="f-answer1"
-                            placeholder="Enter first answer" required>
-						
+                        <textarea class="form-control" name="answer1" id="f-answer1" rows="2"
+                            placeholder="Enter first answer" required></textarea>
+
 						<label for="f-answer2" class="sr-only">Answer 2</label>
-                        <input type="text" class="form-control" name="answer2" id="f-answer2"
-                            placeholder="Enter second answer" required>
+                        <textarea class="form-control" name="answer2" id="f-answer2" rows="2"
+                            placeholder="Enter second answer" required></textarea>
 						
 						<label for="f-answer3" class="sr-only">Answer 3</label>
-                        <input type="text" class="form-control" name="answer3" id="f-answer3"
-                            placeholder="Enter third answer" required>
+                        <textarea class="form-control" name="answer3" id="f-answer3" rows="2"
+                            placeholder="Enter third answer" required></textarea>
 						
 						<label for="f-answer4" class="sr-only">Answer 4</label>
-                        <input type="text" class="form-control" name="answer4" id="f-answer4"
-                            placeholder="Enter fourth answer" required>
+                        <textarea class="form-control" name="answer4" id="f-answer4" rows="2"
+                            placeholder="Enter fourth answer" required></textarea>
+						
+						<label for="f-answer5" class="sr-only">Answer 5</label>
+                        <textarea class="form-control" name="answer5" id="f-answer5" rows="2"
+                            placeholder="Enter fifth answer" required></textarea>
 						
 						<label for="f-solution" class="sr-only">Solution</label>
                         <input type="text" class="form-control" name="solution" id="f-solution"
                             placeholder="Enter the solution" required>
+						
+						<label for="f-explanation" class="sr-only">Explanation</label>
+                        <textarea class="form-control" name="explanation" id="f-explanation" rows="3"
+                            placeholder="Enter your explanation" required></textarea>
                     </div>
 
                		<!-- a form that adds one question after the other: need javascript -->

@@ -75,6 +75,16 @@ form {
 				-13px -13px 20px #ffffff;
 }
 
+.form-control {
+	margin-top: 0.5rem;
+	margin-bottom: 2px;
+	border: 1px solid black;
+}
+
+textarea {
+	resize: none;
+}
+
 footer {
    position: fixed;
    bottom: 0;

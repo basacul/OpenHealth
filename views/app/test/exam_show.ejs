@@ -98,10 +98,16 @@
 							<div class="card mt-5 neomorphic-box border-danger">
 
 							<% } %>
-							<div class="card-header d-flex justify-content-between"> <!-- style="background-color: black"> -->
-								<%= question.question %>
+							<div class="card-header d-flex justify-content-between"> 
+								<%= question.question %> <br>
+								<%= question.explanation %>
 							</div>
-								
+							<% if(question.img){ %>
+							<div class="card">
+							  <img class="card-img-top" src="<%=question.img%>" alt="Card image cap">
+							</div>
+							<% } %>
+							
 						<ul class="list-group list-group-flush">
 							<% question.answers.forEach(function(answer){ %>
 								<% if(answer.id == question.solution){ %>

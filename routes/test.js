@@ -100,9 +100,16 @@ router.put('/:id', middleware.isLoggedIn, function(req, res){
 				{id: 0, answer: req.body.answer1}, 
 				{id: 1, answer: req.body.answer2}, 
 				{id: 2, answer: req.body.answer3}, 
-				{id: 3, answer: req.body.answer4}
+				{id: 3, answer: req.body.answer4},
+				{id: 4, answer: req.body.answer5}
 			];
 			newQuestion.solution = req.body.solution;
+			newQuestion.explanation = req.body.explanation;
+			newQuestion.type = req.body.type;
+			// TODO check for image
+			newQuestion.img = req.body.image;
+			newQuestion.creationDate = Date.now();
+			
 			Test.findById(req.params.id, function(errTest, foundTest){
 				if(errTest){
 					console.log(err.message);

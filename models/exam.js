@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const examSchema = new mongoose.Schema({
 	correct: Number,
+	takenAt: Date,
 	/* TODO: generate a model Answer referencing to the question */
 	answers: [{
 		id: {
