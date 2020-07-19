@@ -5,7 +5,8 @@ const corona = require('../utils/corona');
 
 router.get("/", middleware.isLoggedIn, function (req, res) {
 	
-	corona.getData();
+	// currently paused as of July 18 2020
+	// corona.getData();
 	
     res.render("app/home/home");
 });
