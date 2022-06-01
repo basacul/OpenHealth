@@ -1,4 +1,4 @@
-# OpenHealth
+# OpenHealth (deprecated and not maintained since mid 2020)
 This web application is developed on top of the Mana web application with the purpose to implement the given functionalities onto a running healthcare setting. The starting date is set for April 25 2020. 
 
 The roadmap for this application is set to grow organically. Thus, at the beginning the application works as a repository with important information to perform my job as a physician in the emergency department. Next, the given functionalitis are refined to allow the exchange of data with co-workers with the main goal to extend it to clients. As a side hustle, an application is written to automate the analysis of ECGs. The chosen design is based on neomorphism with dark and white mode.
